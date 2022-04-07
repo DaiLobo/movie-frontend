@@ -24,12 +24,39 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
+    <title>Movie</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+  
     <!--
+      para muda a cor só mudar o hue-rotate - 100deg é verde e 180 é azul
+
+      fazer um for para repetir as imagens:
+      
+      function ElementsList() {
+        const elements = [];
+
+        for (let i = 0; i < 5; i++) {
+          elements.push(<div key={i}>el {i}</div>);
+        }
+
+        return elements;
+      }
+
+      export default function App() {
+        return (
+          <div className="App">
+            <h1>Generate componets using `for` loop</h1>
+            <ElementsList />
+          </div>
+        );
+}
+    -->
+      <image src="cinema-chair.png" style="filter:invert(50%) sepia(100%) hue-rotate(100deg);" />
+          
+        <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
 
