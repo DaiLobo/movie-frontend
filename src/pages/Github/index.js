@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import Profile from "./components/Profile";
 import RecentSearch from "./components/RecentSearch";
 import SearchBar, {RECENT_USER_KEY} from "./components/SearchBar";
@@ -7,18 +7,19 @@ import Loading from "./components/Loading";
 
 const Github = () => {
     
-    const [recentUsers, setRecentUsers] = useState(() => {
-        const recentUsersStorage = localStorage.getItem(RECENT_USER_KEY)
-    
-        if(recentUsersStorage) {
-          return JSON.parse(recentUsersStorage)
-        }
-        
-        return [];
-      });
+    const [recentUsers, setRecentUsers] = useState([]);
  
       const [user, setUser] = useState();
       const [isLoading, setLoading] = useState(false);
+
+      //primeira vez que carregar a página, ele executa a instrução e setta o valor de recent users
+      useEffect(() => {
+        const recentUsersStorage = localStorage.getItem(RECENT_USER_KEY)
+    
+        if(recentUsersStorage) {
+          setRecentUsers(JSON.parse(recentUsersStorage))
+        }
+      }, [setRecentUsers]) //é recomendado colocar nas dependencias tudo q esta sendo usado pelo useEffect
        
     
     return (

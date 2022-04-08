@@ -1,5 +1,7 @@
 import {Button, FormControl, Row, Col} from "react-bootstrap";
 import {useState} from "react";
+import useDebounced from "../../../hooks/useDebounce";
+
 
 export const RECENT_USER_KEY = "recent_user";
 
@@ -12,6 +14,7 @@ async function customFetch(url) {
 
 const SearchBar = ({setRecentUsers, setLoading, setUser}) => {
     const [username, setUsername] = useState('');
+    useDebounced(username, 2000);
 
     const onChange = (event) => { //evento -> informaçoes do input (formcontrol)
       setUsername(event.target.value)
@@ -59,7 +62,7 @@ const SearchBar = ({setRecentUsers, setLoading, setUser}) => {
 
       <Row className="mb-4">
           <Col>
-              <FormControl placeholder="Type a Github Username" onChange={onChange}></FormControl>
+              <FormControl placeholder="Type a Github Username" onChange={onChange} value={username}></FormControl>
           </Col>
           <Col>
               <Button onClick={onSearchUser} variant="primary">Search User</Button>
