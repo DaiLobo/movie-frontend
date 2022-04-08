@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import Router from "./Router";
 
 //componente, criar uma função que retorna um jsx (javacript com html)
