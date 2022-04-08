@@ -6,42 +6,47 @@ import {
   Database,
 } from "tabler-icons-react";
 import { ThemeIcon, UnstyledButton, Group, Text } from "@mantine/core";
+import { useNavigate } from "react-router-dom";
 
-function MainLink({ icon, color, label }) {
-  return (
-    <UnstyledButton
-      sx={(theme) => ({
-        display: "block",
-        width: "100%",
-        padding: theme.spacing.xs,
-        borderRadius: theme.radius.sm,
-        color:
-          theme.colorScheme === "dark" ? theme.colors.dark[0] : theme.black,
+function MainLink({ icon, color, label, path }) {
 
-        "&:hover": {
-          backgroundColor:
-            theme.colorScheme === "dark"
-              ? theme.colors.dark[6]
-              : theme.colors.gray[0],
-        },
-      })}
-    >
-      <Group>
-        <ThemeIcon color={color} variant="light">
-          {icon}
-        </ThemeIcon>
+    const navigate = useNavigate(); //faz com que a página seja alterada, sem fazer reload
 
-        <Text size="sm">{label}</Text>
-      </Group>
-    </UnstyledButton>
-  );
+    return (
+        <UnstyledButton
+            onClick={() => navigate(path)}
+            sx={(theme) => ({
+            display: "block",
+            width: "100%",
+            padding: theme.spacing.xs,
+            borderRadius: theme.radius.sm,
+            color:
+                theme.colorScheme === "dark" ? theme.colors.dark[0] : theme.black,
+
+            "&:hover": {
+                backgroundColor:
+                theme.colorScheme === "dark"
+                    ? theme.colors.dark[6]
+                    : theme.colors.gray[0],
+            },
+            })}
+        >
+            <Group>
+            <ThemeIcon color={color} variant="light">
+                {icon}
+            </ThemeIcon>
+
+            <Text size="sm">{label}</Text>
+            </Group>
+        </UnstyledButton>
+    );
 }
 
 const routes = [
-    {icon: <GitPullRequest size={16} />, color: "blue", label: "Home" },
-    {icon: <AlertCircle size={16} />, color: "teal", label: "Movie" },
-    {icon: <Messages size={16} />, color: "violet", label: "Session" },
-    {icon: <Database size={16} />, color: "grape", label: "Databases" },
+    {icon: <GitPullRequest size={16} />, color: "blue", label: "Home", path: "/" },
+    {icon: <AlertCircle size={16} />, color: "teal", label: "Movie", path: "/movie"},
+    {icon: <Messages size={16} />, color: "violet", label: "Session", path: "/session"},
+    {icon: <Database size={16} />, color: "grape", label: "Users", path: "/user"},
     
 ]
 
