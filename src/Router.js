@@ -6,6 +6,7 @@ import Movie from "./pages/Movie";
 import Session from "./pages/Session";
 import Users from "./pages/User";
 import User from "./pages/User/User";
+import UserOutlet from "./pages/User/UserOutlet";
 
 //Routes - tudo que for declarado ali é uma rota ou faz parte de uma ou é filho de uma rota
 //BrowserRouter - é um sistema de rota que deve ser passado para o router. existe o hashrouter tbm
@@ -23,7 +24,7 @@ const Router = () => {
                 <Route element={<Home/>} index />
                 <Route path="/movie" element={<Movie/>} />
                 <Route path="/session" element={<Session/>} />
-                <Route path="/user" element={<User/>}>
+                <Route path="/user" element={<UserOutlet/>}>
                     <Route element={<Users/>} index />
                     <Route element={<User/>} path=":userId" />
                 </Route>

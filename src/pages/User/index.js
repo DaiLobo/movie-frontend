@@ -1,4 +1,4 @@
-import {Badge, Table, Title} from "@mantine/core"
+import {Badge, Table} from "@mantine/core"
 import { useEffect, useState } from "react";
 
 //para não fazer tr por tr, a gente faz um map
@@ -9,14 +9,13 @@ const User = () => {
 
     useEffect(() => {
         fetch('http://localhost:3333/api/user')
-            .then((response) => response.json)
+            .then((response) => response.json())
             .then((data) => setUsers(data)) //ou .then(setUsers)
             .catch(console.error);
-    }, [])
+    }, []);
 
     return (
         <>
-            <Title order={4}>Users</Title>
             <Table highlightOnHover>
                 <thead>
                     <tr>
