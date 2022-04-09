@@ -3,6 +3,7 @@ import { AppShell, Navbar, Header, Group, ActionIcon, useMantineColorScheme } fr
 import { MoonStars, Sun } from "tabler-icons-react";
 import MainLinks from "./MainLinks";
 import { Logo } from "./Logo";
+import FontTitle from "./Fonts";
 
 const Layout = () => {
   const {colorScheme, toggleColorScheme} = useMantineColorScheme();
@@ -21,7 +22,8 @@ const Layout = () => {
       header={
         <Header height={60}>
           <Group sx={{ height: "100%" }} px={20} position="apart">
-            <Logo/> <strong>PitangFlix</strong>
+            <Logo/>
+            <FontTitle/>
             <ActionIcon
               variant="default"
               onClick={() => toggleColorScheme()}
