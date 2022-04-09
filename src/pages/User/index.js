@@ -1,6 +1,6 @@
-import {Badge, Table} from "@mantine/core";
+import {Badge, Button, Table, Space} from "@mantine/core";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "../../services/api";
 
 //para não fazer tr por tr, a gente faz um map
@@ -8,6 +8,7 @@ import axios from "../../services/api";
 const User = () => {
 
     const [users, setUsers] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         
@@ -54,6 +55,15 @@ const User = () => {
                     ))}
                 </tbody>
             </Table>
+
+            <Space h="xl"/>
+            <Button onClick={() => navigate("new")} 
+                    variant="gradient" 
+                    gradient={{ from: 'indigo', to: 'cyan' }} 
+                    size="xs">
+                Create User
+            </Button>
+
         </>
     );
 };
