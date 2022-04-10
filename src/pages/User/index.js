@@ -81,7 +81,7 @@ const User = () => {
                             <td>
                             <Button
                                 leftIcon={<Trash />}
-                                onChange={() => onRemoveUser(user.id)}               
+                                onClick={() => onRemoveUser(user.id)}              
                                 variant="white"
                                 color="red">
                                 Remove User
