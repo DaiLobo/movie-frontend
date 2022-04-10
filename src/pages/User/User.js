@@ -17,9 +17,9 @@ const User = () => { //vai ser responsavel por trazer o formulário do usuário
     const onChange = ({target: {name, type, checked, value}}) => {
         setForm({
             ...form, //spread operator - copia todos os valores do objeto, para não ficar substituindo
-            [name]: value,
-        })
-    }
+            [name]: type === "checkbox" ? checked : value,
+        });
+    };
 
     const onSubmit = () => {}
 
@@ -63,6 +63,7 @@ const User = () => { //vai ser responsavel por trazer o formulário do usuário
                 mb={8}
                 name="password"
                 value={form.password}
+                onChange={onChange}
                 placeholder="Password"
                 label="Password"
                 description="Password must include at least one letter, number and special character"
@@ -71,8 +72,8 @@ const User = () => { //vai ser responsavel por trazer o formulário do usuário
            
             <Select
                 mb={8}
-                name="role"
                 value={form.role}
+                onChange={(value) => onChange({target: {name: "role", value}})}
                 required
                 label="User Role"
                 placeholder="Pick one"
@@ -82,7 +83,12 @@ const User = () => { //vai ser responsavel por trazer o formulário do usuário
                 ]}
             />
 
-            <DatePicker name="birthDate" mb={8} value={form.birthDate} placeholder="Select Birthdate" label="Birthdate" />
+            <DatePicker 
+                onChange={(value) => onChange({target: {name: "birthDate", value}})}
+                mb={8}
+                value={form.birthDate}
+                placeholder="Select Birthdate"
+                label="Birthdate" />
 
             <Checkbox name="reviewer" mt={20} value={form.reviewer} label="Reviewer" color="indigo"/>
             
