@@ -1,6 +1,8 @@
-import {Badge, Button, Table, Space} from "@mantine/core";
+import {Badge, Button, Table, Space, Title} from "@mantine/core";
+import { showNotification } from "@mantine/notifications";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { Pencil, Trash } from "tabler-icons-react";
 import axios from "../../services/api";
 
 //para não fazer tr por tr, a gente faz um map
@@ -21,8 +23,28 @@ const User = () => {
         //     .catch(console.error);
     }, []);
 
+    const onRemoveUser = async (id) => {
+        try {
+            await axios.delete(`/user/${id}`);
+
+            showNotification({
+                title: "Success",
+                message: "User Removed with Success",
+            })
+
+            setUsers(users.filter((user) => user.id !== id))
+        } catch (error) {
+            showNotification({
+                title: "Error",
+                message: error.response.data.message,
+                color: "red"
+            })
+        }
+    }
+
     return (
         <>
+            <Title order={4}>Users ({users.length}) </Title>
             <Table highlightOnHover>
                 <thead>
                     <tr>
@@ -32,16 +54,13 @@ const User = () => {
                         <th>Role</th>
                         <th>BirthDate</th>
                         <th>Reviewer</th>
+                        <th>Actions</th>
                     </tr>
                 </thead> 
                 <tbody>
                     {users.map((user, index) => (
                         <tr key={index}>
-                            <td>
-                                <Link to={`${user.id}`}>
-                                    {user.id}
-                                </Link>
-                            </td>
+                            <td>{user.id}</td>
                             <td>{user.name}</td>
                             <td>{user.email}</td>
                             <td>{user.role}</td>
@@ -50,6 +69,23 @@ const User = () => {
                                 <Badge variant="gradient" gradient={{ from: '#ed6ea0', to: '#ec8c69', deg: 35 }}>
                                     {user.reviewer ? "Yes" : "No"}
                                 </Badge>
+                            </td>
+                            <td>
+                            <Button 
+                                leftIcon={<Pencil />}
+                                onClick={() => navigate(user.id)}
+                                variant="white">
+                                Edit User
+                            </Button>
+                            </td>
+                            <td>
+                            <Button
+                                leftIcon={<Trash />}
+                                onChange={() => onRemoveUser(user.id)}               
+                                variant="white"
+                                color="red">
+                                Remove User
+                            </Button>
                             </td>
                         </tr>
                     ))}

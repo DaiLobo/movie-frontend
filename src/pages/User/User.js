@@ -1,15 +1,19 @@
 import { Button, InputWrapper, Input , Select, Checkbox, PasswordInput, Title, Space } from "@mantine/core";
 import { DatePicker } from "@mantine/dates";
+import { showNotification } from "@mantine/notifications";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "../../services/api";
 
 const User = () => { //vai ser responsavel por trazer o formulário do usuário
+    const navigate = useNavigate(); //para poder mandar o usuário para alguma página
     const [form, setForm] = useState({
        name: '',
        email: '',
        password: '',
        role: '',
-       birthDate: '',
-       reviewer: ''
+       birthDate: new Date(),
+       reviewer: false,
     });
 
     //função para manipular os input's
@@ -21,7 +25,26 @@ const User = () => { //vai ser responsavel por trazer o formulário do usuário
         });
     };
 
-    const onSubmit = () => {}
+    const onSubmit = async () => {
+        const user = {
+            ...form,
+            birthDate: form.birthDate.toISOString(),
+        };
+        try {
+            //requisição é o post, passa o endpoint e a informação que quer passar no body da requisição
+            await axios.post("/user", user);
+
+            showNotification({
+                title: "Success",
+                message: "User created with success",
+                color: 'indigo',
+            })
+            navigate("/user");
+        } catch (error) {
+            console.log(error)
+        }
+
+    };
 
     return (
         <div>
@@ -72,14 +95,14 @@ const User = () => { //vai ser responsavel por trazer o formulário do usuário
            
             <Select
                 mb={8}
-                value={form.role}
-                onChange={(value) => onChange({target: {name: "role", value}})}
                 required
                 label="User Role"
                 placeholder="Pick one"
+                value={form.role}
+                onChange={(value) => onChange({ target: { name: "role", value } })}
                 data={[
-                    { value: 'ADMINISTRATOR', label: 'Administrator' },
-                    { value: 'USER', label: 'User' },
+                  { value: "ADMINISTRATOR", label: "Administrador" },
+                  { value: "USER", label: "User" },
                 ]}
             />
 
@@ -90,7 +113,13 @@ const User = () => { //vai ser responsavel por trazer o formulário do usuário
                 placeholder="Select Birthdate"
                 label="Birthdate" />
 
-            <Checkbox name="reviewer" mt={20} value={form.reviewer} label="Reviewer" color="indigo"/>
+            <Checkbox
+                name="reviewer"
+                mt={20}
+                onChange={onChange}
+                checked={form.reviewer}
+                label="Reviewer"
+                color="indigo"/>
             
             <Button onClick={onSubmit}
                     fullWidth
