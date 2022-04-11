@@ -1,9 +1,10 @@
 import React from "react";
 import {
-  GitPullRequest,
-  AlertCircle,
-  Messages,
-  Database,
+  Ticket,
+  PlayerPlay,
+  User,
+  Section,
+  Home,
 } from "tabler-icons-react";
 import { ThemeIcon, UnstyledButton, Group, Text } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
@@ -43,10 +44,11 @@ function MainLink({ icon, color, label, path }) {
 }
 
 const routes = [
-    {icon: <GitPullRequest size={16} />, color: "blue", label: "Home", path: "/" },
-    {icon: <AlertCircle size={16} />, color: "teal", label: "Movie", path: "/movie"},
-    {icon: <Messages size={16} />, color: "violet", label: "Session", path: "/session"},
-    {icon: <Database size={16} />, color: "grape", label: "Users", path: "/user"},
+    {icon: <Home size={16} />, color: "blue", label: "Home", path: "/" },
+    {icon: <PlayerPlay size={16} />, color: "teal", label: "Movie", path: "/movie"},
+    {icon: <Section size={16} />, color: "violet", label: "Session", path: "/session"},
+    {icon: <Ticket size={16} />, color: "yellow", label: "Ticket", path: "/ticket"},
+    {icon: <User size={16} />, color: "red", label: "Users", path: "/user"},
     
 ]
 

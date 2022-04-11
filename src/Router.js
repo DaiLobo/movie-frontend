@@ -4,6 +4,7 @@ import Layout from "./components/Layout";
 import Home from "./pages/Home"
 import Movie from "./pages/Movie";
 import Session from "./pages/Session";
+import Ticket from "./pages/Ticket"
 import Users from "./pages/User";
 import User from "./pages/User/User";
 
@@ -23,6 +24,7 @@ const Router = () => {
                 <Route element={<Home/>} index />
                 <Route path="/movie" element={<Movie/>} />
                 <Route path="/session" element={<Session/>} />
+                <Route path="/ticket" element={<Ticket/>} />
                 <Route path="/user" element={<Outlet/>}>
                     <Route element={<Users/>} index />
                     <Route element={<User/>} path=":userId" />
