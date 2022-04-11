@@ -1,6 +1,29 @@
-import { InputWrapper, Input , Select, NumberInput, Textarea } from "@mantine/core";
+import { InputWrapper, Input , Select, NumberInput, Textarea, Button } from "@mantine/core";
+import { useState } from "react";
 
-const Movie = ({form}) => (
+const initialState = {
+    name: "",
+    description: "",
+    classification: "",
+    duration: 0,
+};
+
+const Movie = ({movie = initialState, onSubmit}) =>{ 
+
+    const [form, setForm] = useState(movie);
+
+    const onChange = (event) => {
+        const {
+        target: { name, type, checked, value },
+        } = event;
+
+        setForm((prevForm) => ({
+        ...prevForm,
+        [name]: type === "checkbox" ? checked : value,
+        }));
+    };
+    
+    return (
     <>
         <InputWrapper
         id="name"
@@ -12,7 +35,7 @@ const Movie = ({form}) => (
             id="name"
             name="name"
             value={form.name}
-            {...form.getInputProps('name')}
+            onChange={onChange}
         />
         </InputWrapper>
 
@@ -26,7 +49,7 @@ const Movie = ({form}) => (
             id="description"
             name="description"
             value={form.description}
-            {...form.getInputProps('description')}
+            onChange={onChange}
         />
         </InputWrapper>
         <Select
@@ -35,7 +58,7 @@ const Movie = ({form}) => (
             label="Classification"
             placeholder="Pick one"
             value={form.classification}
-            {...form.getInputProps('classification')}
+            onChange={(value) => onChange({target: {name: "classification", value}})}
             data={[
                 {
                     value: "GENERAL_AUDIENCE",
@@ -54,9 +77,12 @@ const Movie = ({form}) => (
             required
             label="Duration"
             value={form.duration}
-            {...form.getInputProps('duration')}
+            onChange={(value) => onChange({target: {name: "duration", value}})}
         />
+        <Button fullWidth onClick={() => onSubmit(form)}>
+            Submit
+        </Button>
     </>
-)
-
+    )
+}
 export default Movie;

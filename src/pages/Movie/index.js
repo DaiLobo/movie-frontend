@@ -1,20 +1,33 @@
 import { useModals } from '@mantine/modals';
-import { Button } from '@mantine/core';
+import { showNotification } from '@mantine/notifications';
 import ListView from "../../components/ListView";
+import axios from '../../services/api';
 import MovieForm from "./Movie";
-import { useForm } from '@mantine/form';
+
 
 const Movie = () =>{ 
 
-    const form = useForm({
-        initialValues: {
-            name: "",
-            description: "",
-            classification: "",
-            duration: "",
-        },
-    });
     const modals = useModals();
+
+    const onSubmit = (modalId) => async (form) => {
+        try {
+            await axios.post("/movie", form);
+            
+            showNotification({
+                title: "Success",
+                message: "Movie Created with Success",
+                color: "green"
+            });
+            modals.closeModal(modalId);
+
+        } catch (error) {
+            showNotification({
+                title: "Error",
+                message: error.response.data.message,
+                color: "red"
+            });
+        }
+    }
 
     const openContentModal = () => {
         const id = modals.openModal({
@@ -22,10 +35,7 @@ const Movie = () =>{
           size: "xl",
           children: (
             <>
-              <MovieForm form={form}/>
-              <Button fullWidth onClick={() => modals.closeModal(id)}>
-                Submit
-              </Button>
+              <MovieForm onSubmit={(form) => onSubmit(id)(form)}/>
             </>
           ),
         });
