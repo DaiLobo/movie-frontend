@@ -15,6 +15,8 @@ const Session = () => {
         try {
             //para fazer put e não post
             if(form.id) {
+                delete form.SessionSeats;
+                delete form.movie;
                 await axios.put(`/session/${form.id}`, form);
             } else {
                 await axios.post("/session", form);
@@ -25,8 +27,10 @@ const Session = () => {
                 message: `Session ${form.id ? "Updated" : "Created"} with Success`,
                 color: "green"
             });
+
             modals.closeModal(modalId);
             setLastSessionTimestamp(new Date().getTime());
+            
         } catch (error) {
             showNotification({
                 title: "Error",
@@ -37,12 +41,19 @@ const Session = () => {
     }
 
     const openContentModal = (session) => {
+
+        const _session = {...session};
+
+        if(_session.sessionDate) {
+            _session.sessionDate = new Date(_session.sessionDate)
+        }
+
         const id = modals.openModal({
           title: `${session?.id ? "Update" : "Create" } Session`,
           size: "xl",
           children: (
             <>
-              <SessionForm session={session} onSubmit={(form) => onSubmit(id)(form)}/>
+              <SessionForm session={_session.id ? _session : undefined} onSubmit={(form) => onSubmit(id)(form)}/>
             </>
           ),
         });

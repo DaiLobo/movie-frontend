@@ -5,7 +5,7 @@ import axios from "../../services/api";
 
 const initialState = {
     movieId: "",
-    sessionDate: "",
+    sessionDate: new Date(),
     room: "",
     price: "",
 };
@@ -21,12 +21,12 @@ const Session = ({session = initialState, onSubmit}) =>{
 
     const onChange = (event) => {
         const {
-        target: { name, type, checked, value },
+        target: { name, value },
         } = event;
 
         setForm((prevForm) => ({
         ...prevForm,
-        [name]: type === "checkbox" ? checked : value,
+        [name]: value,
         }));
     };
     
@@ -39,7 +39,8 @@ const Session = ({session = initialState, onSubmit}) =>{
         label="Movie"
         >
         <Autocomplete
-            onChange={(value) => onChange({target: {name: "movie", value}})}
+            value={form.movieId}
+            onChange={(value) => onChange({target: {name: "movieId", value}})}
             data={
                movies.map((movie) => (
                 {value: movie.id, label: movie.name}
@@ -48,6 +49,7 @@ const Session = ({session = initialState, onSubmit}) =>{
         />
         </InputWrapper>
         <DatePicker
+            value={form.sessionDate}
             label="Session Date"
             onChange={(value) => onChange({target: {name: "room", value}})}
         />
