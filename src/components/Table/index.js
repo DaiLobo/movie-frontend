@@ -3,6 +3,9 @@ import {Button, Table as TableMantine} from "@mantine/core";
 //mapeando os valores de forma dinamica
 const Table = ({actions = [], rows = [], columns = []}) => {
 
+    //para conseguir fazer aparecer dinamicamente as actions
+    const hasActions = Boolean(actions.length);
+
     return (
         <TableMantine highlightOnHover>
                 <thead>
@@ -10,18 +13,31 @@ const Table = ({actions = [], rows = [], columns = []}) => {
                         {columns.map((column, index) => (
                             <th key={index}>{column.value}</th>
                         ))}
+
+                        {
+                            hasActions && <th>Actions</th>
+                        }
+
                     </tr>
                 </thead> 
                 <tbody>
                     {rows.map((row, index) => (
                         <tr key={index}>
-                            {columns.map((column, index) => (
-                            <td key={index}>{row[column.key]}</td>
-                        ))}
+                            {columns.map((column, index) => {
+                                const value = row[column.key];
+                                return ( 
+                                    <td key={index}>
+                                        {typeof column.render === "function"
+                                            ? column.render(value)
+                                            : value
+                                        } 
+                                    </td>
+                                );
+                            })}
 
-                        {Boolean(actions.length) &&
+                        {hasActions &&
                             <td>
-                                {actions.map((action) => (
+                                {actions.map((action, index) => (
                                     <Button 
                                         mr={10}
                                         key={index}

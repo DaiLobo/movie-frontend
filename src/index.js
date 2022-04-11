@@ -1,5 +1,6 @@
 import { ColorSchemeProvider, MantineProvider } from '@mantine/core';
 import { NotificationsProvider } from '@mantine/notifications';
+import { ModalsProvider } from '@mantine/modals';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Router from "./Router";
@@ -10,7 +11,9 @@ ReactDOM.render( //o react dom está enviando o conteudo abaixo dentro da div ro
   <MantineProvider>
     <ColorSchemeProvider>
     <NotificationsProvider>
-      <Router />
+      <ModalsProvider>
+        <Router />
+      </ModalsProvider>
     </NotificationsProvider>
     </ColorSchemeProvider>
   </MantineProvider>,
