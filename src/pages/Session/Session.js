@@ -1,16 +1,23 @@
-import { InputWrapper, Input , Select, NumberInput, Textarea, Button } from "@mantine/core";
-import { useState } from "react";
+import { InputWrapper, Select, NumberInput, Button, Autocomplete } from "@mantine/core";
+import { DatePicker } from "@mantine/dates";
+import { useEffect, useState } from "react";
+import axios from "../../services/api";
 
 const initialState = {
-    name: "",
-    description: "",
-    classification: "",
-    duration: 0,
+    movieId: "",
+    sessionDate: "",
+    room: "",
+    price: "",
 };
 
 const Session = ({session = initialState, onSubmit}) =>{ 
 
+    const [movies, setMovies] = useState([]);
     const [form, setForm] = useState(session);
+
+    useEffect(() => {
+        axios.get('/movie').then((response) => setMovies(response.data))
+    }, [])
 
     const onChange = (event) => {
         const {
@@ -26,58 +33,52 @@ const Session = ({session = initialState, onSubmit}) =>{
     return (
     <>
         <InputWrapper
-        id="name"
+        id="movieId"
         mb={8}
         required
-        label="Movie Name"
+        label="Movie"
         >
-        <Input
-            id="name"
-            name="name"
-            value={form.name}
-            onChange={onChange}
+        <Autocomplete
+            onChange={(value) => onChange({target: {name: "movie", value}})}
+            data={
+               movies.map((movie) => (
+                {value: movie.id, label: movie.name}
+               ))
+            }
         />
         </InputWrapper>
-
-        <InputWrapper
-        id="description"
-        mb={8}
-        required
-        label="Description"
-        >
-        <Textarea
-            id="description"
-            name="description"
-            value={form.description}
-            onChange={onChange}
+        <DatePicker
+            label="Session Date"
+            onChange={(value) => onChange({target: {name: "room", value}})}
         />
-        </InputWrapper>
         <Select
             mb={8}
             required
-            label="Classification"
+            label="Room"
             placeholder="Pick one"
-            value={form.classification}
-            onChange={(value) => onChange({target: {name: "classification", value}})}
+            value={form.room}
+            onChange={(value) => onChange({target: {name: "room", value}})}
             data={[
                 {
-                    value: "GENERAL_AUDIENCE",
-                    label: "GENERAL_AUDIENCE"
+                    value: "COMMON",
+                    label: "COMMON"
                 },
                 {
-                    value: "PARENT_GUIDANCE_SUGGESTED",
-                    label: "PARENT_GUIDANCE_SUGGESTED",
+                    value: "DLUX",
+                    label: "DLUX",
                 },
-                {   value: "RESTRICTED", label: "RESTRICTED" },
+                {   value: "IMAX",
+                    label: "IMAX"
+                },
             ]}
         />
         <NumberInput
-            id="duration"
+            id="price"
             mb={8}
             required
-            label="Duration"
-            value={form.duration}
-            onChange={(value) => onChange({target: {name: "duration", value}})}
+            label="Price"
+            value={form.price}
+            onChange={(value) => onChange({target: {name: "price", value}})}
         />
         <Button fullWidth onClick={() => onSubmit(form)}>
             Submit
