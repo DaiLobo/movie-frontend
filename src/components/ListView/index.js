@@ -7,7 +7,7 @@ import { Pencil, Trash } from "tabler-icons-react";
 import axios from "../../services/api";
 import Table from "../Table";
 
-const ListView = ({columns, endpoint, title, onClickNew}) => {
+const ListView = ({columns, endpoint, title, openContentModal, refetchTimestamp}) => {
 
     const modals = useModals();
 
@@ -19,7 +19,7 @@ const ListView = ({columns, endpoint, title, onClickNew}) => {
         
         const onRemoveAction = async () => {
             try {
-                await axios.delete(`/${endpoint}/${id}`);
+                await axios.delete(`${endpoint}/${id}`);
 
                 showNotification({
                     title: "Success",
@@ -56,25 +56,33 @@ const ListView = ({columns, endpoint, title, onClickNew}) => {
     useEffect(() => {
         axios.get(endpoint).then((response) => setRows(response.data));
 
-    }, [endpoint]);
+    }, [endpoint, refetchTimestamp]);
+
+    const isContentModalFunction = typeof openContentModal === "function";
 
     return (
         <>
         
-            <Title order={4}>{title}</Title>
+            <Title order={4}>{`${title} (${rows.length})`}</Title>
             <Table
                 actions={[
                 {
                     icon: <Pencil/>,
-                    onClick: ({id}) => navigate(`${id}`),
-                    color: "white",
                     name: "Edit",
+                    color: "white",
+                    onClick: (data) => {
+                        if (isContentModalFunction) {
+                          return openContentModal(data);
+                        }
+          
+                        navigate(`${data.id}`);
+                    },
                 },
                 {
                     icon: <Trash/>,
-                    onClick: onRemove,
-                    color: "red",
                     name: "Remove",
+                    color: "red",
+                    onClick: onRemove,
                 },
                 ]}
                 rows={rows}
@@ -83,8 +91,8 @@ const ListView = ({columns, endpoint, title, onClickNew}) => {
             <Space h="xl"/>
             <Button 
                 onClick={() => {
-                    if (typeof onClickNew === "function") {
-                        return onClickNew();
+                    if (isContentModalFunction) {
+                        return openContentModal();
                     }
                     navigate("new")}
                 }

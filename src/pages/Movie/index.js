@@ -1,5 +1,6 @@
 import { useModals } from '@mantine/modals';
 import { showNotification } from '@mantine/notifications';
+import {useState} from "react";
 import ListView from "../../components/ListView";
 import axios from '../../services/api';
 import MovieForm from "./Movie";
@@ -7,19 +8,26 @@ import MovieForm from "./Movie";
 
 const Movie = () =>{ 
 
+    const [lastMovieTimestamp, setLastMovieTimestamp] = useState();
     const modals = useModals();
 
     const onSubmit = (modalId) => async (form) => {
         try {
-            await axios.post("/movie", form);
+            //para fazer put e não post
+            if(form.id) {
+                delete form.Session;
+                await axios.put(`/movie/${form.id}`, form);
+            } else {
+                await axios.post("/movie", form);
+            }
             
             showNotification({
                 title: "Success",
-                message: "Movie Created with Success",
+                message: `Movie ${form.id ? "Updated" : "Created"} with Success`,
                 color: "green"
             });
             modals.closeModal(modalId);
-
+            setLastMovieTimestamp(new Date().getTime());
         } catch (error) {
             showNotification({
                 title: "Error",
@@ -29,13 +37,13 @@ const Movie = () =>{
         }
     }
 
-    const openContentModal = () => {
+    const openContentModal = (movie) => {
         const id = modals.openModal({
-          title: 'Create Movie',
+          title: `${movie?.id ? "Update" : "Create" } Movie`,
           size: "xl",
           children: (
             <>
-              <MovieForm onSubmit={(form) => onSubmit(id)(form)}/>
+              <MovieForm movie={movie} onSubmit={(form) => onSubmit(id)(form)}/>
             </>
           ),
         });
@@ -67,7 +75,8 @@ const Movie = () =>{
         ]}
         endpoint="/movie"
         title="Movie"
-        onClickNew={openContentModal}
+        openContentModal={openContentModal}
+        refetchTimestamp={lastMovieTimestamp}
         />
     );
 };
